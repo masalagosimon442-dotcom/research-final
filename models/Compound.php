@@ -164,7 +164,10 @@ class Compound {
     public function syncReferences(int $compoundId, array $referenceIds): void {
         $this->db->prepare("DELETE FROM compound_reference WHERE compound_id = ?")->execute([$compoundId]);
         if (empty($referenceIds)) return;
-        $stmt = $this->db->prepare("INSERT IGNORE INTO compound_reference (compound_id, reference_id) VALUES (?, ?)");
+        $sql = DB_DRIVER === 'pgsql'
+            ? "INSERT INTO compound_reference (compound_id, reference_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
+            : "INSERT IGNORE INTO compound_reference (compound_id, reference_id) VALUES (?, ?)";
+        $stmt = $this->db->prepare($sql);
         foreach ($referenceIds as $refId) $stmt->execute([$compoundId, (int)$refId]);
     }
 
@@ -217,11 +220,19 @@ class Compound {
     }
 
     public function getMonthlyTrend(int $months = 12): array {
-        $stmt = $this->db->prepare(
-            "SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS cnt
-             FROM compounds WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? MONTH)
-             GROUP BY month ORDER BY month ASC"
-        );
+        if (DB_DRIVER === 'pgsql') {
+            $stmt = $this->db->prepare(
+                "SELECT TO_CHAR(created_at, 'YYYY-MM') AS month, COUNT(*) AS cnt
+                 FROM compounds WHERE created_at >= NOW() - INTERVAL '1 month' * ?
+                 GROUP BY month ORDER BY month ASC"
+            );
+        } else {
+            $stmt = $this->db->prepare(
+                "SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS cnt
+                 FROM compounds WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? MONTH)
+                 GROUP BY month ORDER BY month ASC"
+            );
+        }
         $stmt->execute([$months]);
         return $stmt->fetchAll();
     }

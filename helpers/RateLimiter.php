@@ -16,16 +16,27 @@ class RateLimiter {
     }
 
     private function ensureTable(): void {
-        $this->db->exec("
-            CREATE TABLE IF NOT EXISTS login_attempts (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                ip_address VARCHAR(45) NOT NULL,
-                email VARCHAR(255) DEFAULT NULL,
-                attempted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                INDEX idx_ip_time (ip_address, attempted_at),
-                INDEX idx_email_time (email, attempted_at)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ");
+        if (DB_DRIVER === 'pgsql') {
+            $this->db->exec("
+                CREATE TABLE IF NOT EXISTS login_attempts (
+                    id SERIAL PRIMARY KEY,
+                    ip_address VARCHAR(45) NOT NULL,
+                    email VARCHAR(255) DEFAULT NULL,
+                    attempted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                )
+            ");
+        } else {
+            $this->db->exec("
+                CREATE TABLE IF NOT EXISTS login_attempts (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    ip_address VARCHAR(45) NOT NULL,
+                    email VARCHAR(255) DEFAULT NULL,
+                    attempted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    INDEX idx_ip_time (ip_address, attempted_at),
+                    INDEX idx_email_time (email, attempted_at)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+            ");
+        }
     }
 
     /**
@@ -129,9 +140,15 @@ class RateLimiter {
      * Clean up old entries (call periodically).
      */
     public function cleanup(int $olderThanHours = 24): int {
-        $stmt = $this->db->prepare(
-            "DELETE FROM login_attempts WHERE attempted_at < DATE_SUB(NOW(), INTERVAL ? HOUR)"
-        );
+        if (DB_DRIVER === 'pgsql') {
+            $stmt = $this->db->prepare(
+                "DELETE FROM login_attempts WHERE attempted_at < NOW() - INTERVAL '1 hour' * ?"
+            );
+        } else {
+            $stmt = $this->db->prepare(
+                "DELETE FROM login_attempts WHERE attempted_at < DATE_SUB(NOW(), INTERVAL ? HOUR)"
+            );
+        }
         $stmt->execute([$olderThanHours]);
         return $stmt->rowCount();
     }

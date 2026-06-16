@@ -65,7 +65,7 @@ foreach ($stmt->fetchAll() as $r) {
 
 // Search references (limit 3)
 $stmt = $db->prepare(
-    "SELECT id, title, author, year FROM `references`
+    "SELECT id, title, author, year FROM "references"
      WHERE title LIKE ? OR author LIKE ?
      ORDER BY title LIMIT 3"
 );

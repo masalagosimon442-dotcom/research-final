@@ -52,7 +52,11 @@ class ErrorLog {
     }
 
     public function clearOld(int $days = 30): int {
-        $stmt = $this->db->prepare("DELETE FROM error_log WHERE created_at < DATE_SUB(NOW(), INTERVAL ? DAY)");
+        if (DB_DRIVER === 'pgsql') {
+            $stmt = $this->db->prepare("DELETE FROM error_log WHERE created_at < NOW() - INTERVAL '1 day' * ?");
+        } else {
+            $stmt = $this->db->prepare("DELETE FROM error_log WHERE created_at < DATE_SUB(NOW(), INTERVAL ? DAY)");
+        }
         $stmt->execute([$days]);
         return $stmt->rowCount();
     }

@@ -88,32 +88,58 @@ class ActivityLog {
     }
 
     public function getStats(): array {
-        $stmt = $this->db->query(
-            "SELECT COUNT(*) AS total,
-                    SUM(DATE(created_at) = CURDATE()) AS today,
-                    SUM(created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)) AS this_week,
-                    COUNT(DISTINCT user_id) AS unique_users
-             FROM activity_log"
-        );
+        if (DB_DRIVER === 'pgsql') {
+            $stmt = $this->db->query(
+                "SELECT COUNT(*) AS total,
+                        SUM(CASE WHEN created_at::date = CURRENT_DATE THEN 1 ELSE 0 END) AS today,
+                        SUM(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 ELSE 0 END) AS this_week,
+                        COUNT(DISTINCT user_id) AS unique_users
+                 FROM activity_log"
+            );
+        } else {
+            $stmt = $this->db->query(
+                "SELECT COUNT(*) AS total,
+                        SUM(DATE(created_at) = CURDATE()) AS today,
+                        SUM(created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)) AS this_week,
+                        COUNT(DISTINCT user_id) AS unique_users
+                 FROM activity_log"
+            );
+        }
         return $stmt->fetch();
     }
 
     public function getActionFrequency(int $days = 30): array {
-        $stmt = $this->db->prepare(
-            "SELECT action, COUNT(*) AS cnt FROM activity_log
-             WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
-             GROUP BY action ORDER BY cnt DESC LIMIT 10"
-        );
+        if (DB_DRIVER === 'pgsql') {
+            $stmt = $this->db->prepare(
+                "SELECT action, COUNT(*) AS cnt FROM activity_log
+                 WHERE created_at >= NOW() - INTERVAL '1 day' * ?
+                 GROUP BY action ORDER BY cnt DESC LIMIT 10"
+            );
+        } else {
+            $stmt = $this->db->prepare(
+                "SELECT action, COUNT(*) AS cnt FROM activity_log
+                 WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+                 GROUP BY action ORDER BY cnt DESC LIMIT 10"
+            );
+        }
         $stmt->execute([$days]);
         return $stmt->fetchAll();
     }
 
     public function getDailyActivity(int $days = 14): array {
-        $stmt = $this->db->prepare(
-            "SELECT DATE(created_at) AS day, COUNT(*) AS cnt FROM activity_log
-             WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
-             GROUP BY DATE(created_at) ORDER BY day ASC"
-        );
+        if (DB_DRIVER === 'pgsql') {
+            $stmt = $this->db->prepare(
+                "SELECT created_at::date AS day, COUNT(*) AS cnt FROM activity_log
+                 WHERE created_at >= NOW() - INTERVAL '1 day' * ?
+                 GROUP BY created_at::date ORDER BY day ASC"
+            );
+        } else {
+            $stmt = $this->db->prepare(
+                "SELECT DATE(created_at) AS day, COUNT(*) AS cnt FROM activity_log
+                 WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+                 GROUP BY DATE(created_at) ORDER BY day ASC"
+            );
+        }
         $stmt->execute([$days]);
         return $stmt->fetchAll();
     }

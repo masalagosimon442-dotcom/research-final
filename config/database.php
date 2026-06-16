@@ -1,11 +1,12 @@
 <?php
 /**
- * Database Configuration — uses .env values with fallback defaults.
+ * Database Configuration — supports both MySQL (local) and PostgreSQL (Render).
  * Singleton pattern for connection reuse.
  */
 
+if (!defined('DB_DRIVER'))  define('DB_DRIVER',  env('DB_DRIVER', 'mysql'));
 if (!defined('DB_HOST'))    define('DB_HOST',    env('DB_HOST', 'localhost'));
-if (!defined('DB_PORT'))    define('DB_PORT',    env('DB_PORT', '3306'));
+if (!defined('DB_PORT'))    define('DB_PORT',    env('DB_PORT', DB_DRIVER === 'pgsql' ? '5432' : '3306'));
 if (!defined('DB_USER'))    define('DB_USER',    env('DB_USER', 'root'));
 if (!defined('DB_PASS'))    define('DB_PASS',    env('DB_PASS', ''));
 if (!defined('DB_NAME'))    define('DB_NAME',    env('DB_NAME', 'natural_compounds_db'));
@@ -17,21 +18,29 @@ class Database {
     private ?PDO $connection = null;
 
     private function __construct() {
-        $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+        if (DB_DRIVER === 'pgsql') {
+            $dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME;
+        } else {
+            $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+        }
+
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
         ];
 
-        // Enable SSL for cloud databases (TiDB, PlanetScale, etc.)
-        if (defined('DB_SSL') && DB_SSL) {
+        // Enable SSL for cloud databases
+        if (DB_SSL && DB_DRIVER === 'mysql') {
             $options[PDO::MYSQL_ATTR_SSL_CA] = '/etc/ssl/certs/ca-certificates.crt';
             $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = true;
         }
 
         try {
             $this->connection = new PDO($dsn, DB_USER, DB_PASS, $options);
+            if (DB_DRIVER === 'pgsql') {
+                $this->connection->exec("SET client_encoding TO 'UTF8'");
+            }
         } catch (PDOException $e) {
             error_log("Database connection failed: " . $e->getMessage());
             die('<div style="font-family:sans-serif;padding:2rem;color:#842029;background:#f8d7da;border-radius:8px;margin:2rem"><h2>Database Error</h2><p>Could not connect to the database. Please check your configuration.</p></div>');

@@ -3,7 +3,8 @@ FROM php:8.2-apache
 # Install PHP extensions
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
-    && docker-php-ext-install pdo pdo_mysql mysqli curl \
+    libpq-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql mysqli curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache modules
