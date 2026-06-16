@@ -26,8 +26,8 @@ class Database {
 
         // Enable SSL for cloud databases (TiDB, PlanetScale, etc.)
         if (defined('DB_SSL') && DB_SSL) {
-            $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
-            $options[PDO::MYSQL_ATTR_SSL_CA] = '';
+            $options[PDO::MYSQL_ATTR_SSL_CA] = '/etc/ssl/certs/ca-certificates.crt';
+            $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = true;
         }
 
         try {
