@@ -5,6 +5,7 @@
  */
 
 if (!defined('DB_HOST'))    define('DB_HOST',    env('DB_HOST', 'localhost'));
+if (!defined('DB_PORT'))    define('DB_PORT',    env('DB_PORT', '3306'));
 if (!defined('DB_USER'))    define('DB_USER',    env('DB_USER', 'root'));
 if (!defined('DB_PASS'))    define('DB_PASS',    env('DB_PASS', ''));
 if (!defined('DB_NAME'))    define('DB_NAME',    env('DB_NAME', 'natural_compounds_db'));
@@ -16,7 +17,7 @@ class Database {
     private ?PDO $connection = null;
 
     private function __construct() {
-        $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+        $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
