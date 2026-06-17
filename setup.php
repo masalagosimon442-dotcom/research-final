@@ -65,6 +65,37 @@ foreach ($statements as $stmt) {
 
 echo "\n✅ Results: $success executed, $skipped skipped, $errors errors.\n\n";
 
+// Create users table if missing
+try {
+    $pdo->query("SELECT 1 FROM users LIMIT 1");
+} catch (PDOException $e) {
+    echo "Creating users table manually...\n";
+    $pdo->exec("
+        CREATE TABLE users (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(120) NOT NULL,
+            email VARCHAR(180) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            role VARCHAR(20) NOT NULL DEFAULT 'researcher',
+            bio TEXT DEFAULT NULL,
+            institution VARCHAR(200) DEFAULT NULL,
+            avatar VARCHAR(255) DEFAULT NULL,
+            passport_document VARCHAR(255) DEFAULT NULL,
+            api_key VARCHAR(64) DEFAULT NULL,
+            reset_token VARCHAR(64) DEFAULT NULL,
+            reset_expires TIMESTAMP DEFAULT NULL,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+    ");
+    $pdo->exec("
+        INSERT INTO users (name, email, password, role, institution, created_at) VALUES
+        ('System Admin', 'admin@hazina-asili.com', '\$2y\$12\$LN1Rh.LjDDT9TuO5RhGwOeDQhMqx3bRwFMGFhJXXMfYs3MnCKMQWi', 'admin', 'HAZINA ASILI', NOW()),
+        ('Dr. Jane Smith', 'researcher@hazina-asili.com', '\$2y\$12\$LN1Rh.LjDDT9TuO5RhGwOeDQhMqx3bRwFMGFhJXXMfYs3MnCKMQWi', 'researcher', 'University of Dar es Salaam', NOW())
+    ");
+    echo "✅ Users table created and seeded!\n";
+}
+
 // Verify
 $tables = $pdo->query("SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename")->fetchAll(PDO::FETCH_COLUMN);
 echo "Tables (" . count($tables) . "):\n";
