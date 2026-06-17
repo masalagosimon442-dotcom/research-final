@@ -23,12 +23,12 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
         </script>
 
         <!-- 2. Hamburger -->
-        <button class="navbar-toggler border-0 me-auto" type="button" data-bs-toggle="collapse" data-bs-target="#researcherNav" aria-controls="researcherNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#researcherNav" aria-controls="researcherNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- 3. Always visible icons (right side) -->
-        <div class="d-flex align-items-center gap-1">
+        <div class="d-flex align-items-center gap-1 ms-auto ms-lg-0 order-lg-last">
             <!-- Theme toggle -->
             <button class="btn btn-link text-white p-1" onclick="toggleDarkMode()" title="Toggle theme" aria-label="Toggle dark mode" style="font-size:1.1rem">
                 <i class="bi bi-moon-fill theme-icon-dark"></i>
