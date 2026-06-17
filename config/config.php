@@ -48,6 +48,9 @@ define('BASE_URL',      env('APP_URL', 'http://localhost/DB/project/'));
 define('APP_ENV',       env('APP_ENV', 'development'));
 define('APP_DEBUG',     filter_var(env('APP_DEBUG', true), FILTER_VALIDATE_BOOLEAN));
 
+// ── Timezone ──────────────────────────────────────────────────────────────────
+date_default_timezone_set('Africa/Dar_es_Salaam');
+
 // ── Session ───────────────────────────────────────────────────────────────────
 define('SESSION_LIFETIME', (int)env('SESSION_LIFETIME', 3600));
 define('RECORDS_PER_PAGE', (int)env('RECORDS_PER_PAGE', 15));
