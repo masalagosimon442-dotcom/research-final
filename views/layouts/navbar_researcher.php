@@ -9,7 +9,7 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
             <div class="d-flex align-items-center justify-content-center rounded-circle" style="width:36px;height:36px;background:rgba(255,255,255,0.15)">
                 <span style="font-size:1.2rem">🌿</span>
             </div>
-            <span class="fw-bold text-white" style="font-size:1rem;letter-spacing:1px">HAZINA ASILI</span>
+            <span class="fw-bold text-white" style="font-size:1.3rem;letter-spacing:1.5px">HAZINA ASILI</span>
         </a>
         <script>
         (function(){
