@@ -19,9 +19,9 @@ if ($type && $format === 'csv') {
         case 'compounds':
             $model   = new Compound();
             $rows    = $model->getAll(0, 9999);
-            $headers = ['ID','Name','Formula','Molecular Weight','Organism','Description'];
+            $headers = ['ID','Name','Formula','Molecular Weight','Organism','Structure Image','Description'];
             foreach ($rows as $r) {
-                $data[] = [$r['id'], $r['name'], $r['formula'], $r['molecular_weight'], $r['organism_name'] ?? '', $r['description']];
+                $data[] = [$r['id'], $r['name'], $r['formula'], $r['molecular_weight'], $r['organism_name'] ?? '', $r['structure_image'] ?? '', $r['description']];
             }
             break;
         case 'organisms':
