@@ -4,15 +4,12 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top shadow" role="navigation" aria-label="Main navigation">
     <div class="container-fluid">
-        <!-- Logo -->
+        <!-- 1. Logo + Title -->
         <a class="navbar-brand d-flex align-items-center gap-2" href="<?= BASE_URL ?>views/researcher/dashboard.php" id="navLogo" style="text-decoration:none">
-            <div class="d-flex align-items-center justify-content-center rounded-circle" style="width:40px;height:40px;background:rgba(255,255,255,0.15)">
-                <span style="font-size:1.4rem">🌿</span>
+            <div class="d-flex align-items-center justify-content-center rounded-circle" style="width:36px;height:36px;background:rgba(255,255,255,0.15)">
+                <span style="font-size:1.2rem">🌿</span>
             </div>
-            <div class="d-flex flex-column lh-1 d-none d-md-flex">
-                <span class="fw-bold text-white" style="font-size:1.1rem;letter-spacing:1px">HAZINA ASILI</span>
-                <span style="font-size:.6rem;color:rgba(255,255,255,.7)">Natural Compounds DB</span>
-            </div>
+            <span class="fw-bold text-white d-none d-sm-inline" style="font-size:1rem;letter-spacing:1px">HAZINA ASILI</span>
         </a>
         <script>
         (function(){
@@ -25,25 +22,30 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
         })();
         </script>
 
-        <!-- ALWAYS VISIBLE: Icons (outside hamburger) -->
-        <div class="d-flex align-items-center gap-1 order-lg-last">
+        <!-- 2. Hamburger -->
+        <button class="navbar-toggler border-0 me-auto" type="button" data-bs-toggle="collapse" data-bs-target="#researcherNav" aria-controls="researcherNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- 3. Always visible icons (right side) -->
+        <div class="d-flex align-items-center gap-1">
             <!-- Theme toggle -->
-            <button class="btn btn-link nav-link text-white p-2" onclick="toggleDarkMode()" title="Toggle theme" aria-label="Toggle dark mode">
+            <button class="btn btn-link text-white p-1" onclick="toggleDarkMode()" title="Toggle theme" aria-label="Toggle dark mode" style="font-size:1.1rem">
                 <i class="bi bi-moon-fill theme-icon-dark"></i>
                 <i class="bi bi-sun-fill theme-icon-light"></i>
             </button>
 
             <!-- Notification Bell -->
             <div class="dropdown">
-                <a class="btn btn-link nav-link text-white p-2 position-relative" href="#" data-bs-toggle="dropdown" aria-label="Notifications">
-                    <i class="bi bi-bell fs-5"></i>
+                <a class="btn btn-link text-white p-1 position-relative" href="#" data-bs-toggle="dropdown" aria-label="Notifications" style="font-size:1.1rem">
+                    <i class="bi bi-bell"></i>
                     <?php if ($unreadNotifs > 0): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:.55rem">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:.5rem">
                         <?= $unreadNotifs > 9 ? '9+' : $unreadNotifs ?>
                     </span>
                     <?php endif; ?>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" style="min-width:280px;max-height:350px;overflow-y:auto">
+                <ul class="dropdown-menu dropdown-menu-end" style="min-width:260px;max-height:320px;overflow-y:auto">
                     <li class="px-3 py-2 d-flex justify-content-between align-items-center border-bottom">
                         <span class="fw-semibold small">Notifications</span>
                         <a href="<?= BASE_URL ?>views/notifications.php" class="small text-success">View all</a>
@@ -64,19 +66,18 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
                 </ul>
             </div>
 
-            <!-- Profile dropdown -->
+            <!-- Profile -->
             <div class="dropdown">
-                <a class="btn btn-link nav-link text-white p-2 d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown" aria-label="Profile">
-                    <i class="bi bi-person-circle fs-5"></i>
-                    <span class="d-none d-md-inline small"><?= sanitize(currentUser()['name']) ?></span>
+                <a class="btn btn-link text-white p-1" href="#" data-bs-toggle="dropdown" aria-label="Profile" style="font-size:1.1rem">
+                    <i class="bi bi-person-circle"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li class="px-3 py-2 border-bottom">
-                        <div class="fw-semibold"><?= sanitize(currentUser()['name']) ?></div>
-                        <div class="text-muted small"><?= sanitize(currentUser()['email']) ?></div>
+                        <div class="fw-semibold small"><?= sanitize(currentUser()['name']) ?></div>
+                        <div class="text-muted" style="font-size:.7rem"><?= sanitize(currentUser()['email']) ?></div>
                     </li>
                     <li><a class="dropdown-item" href="<?= BASE_URL ?>views/profile.php"><i class="bi bi-person me-2"></i>My Profile</a></li>
-                    <li><a class="dropdown-item" href="<?= BASE_URL ?>views/notifications.php"><i class="bi bi-bell me-2"></i>Notifications <?php if ($unreadNotifs): ?><span class="badge bg-warning text-dark"><?= $unreadNotifs ?></span><?php endif; ?></a></li>
+                    <li><a class="dropdown-item" href="<?= BASE_URL ?>views/notifications.php"><i class="bi bi-bell me-2"></i>Notifications</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form method="POST" action="<?= BASE_URL ?>controllers/process.php">
@@ -89,14 +90,9 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
                     </li>
                 </ul>
             </div>
-
-            <!-- Hamburger (for nav links only) -->
-            <button class="navbar-toggler border-0 ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#researcherNav" aria-controls="researcherNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
         </div>
 
-        <!-- COLLAPSIBLE: Navigation links only -->
+        <!-- 4. Collapsible nav links -->
         <div class="collapse navbar-collapse" id="researcherNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -136,11 +132,8 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
                     </ul>
                 </li>
             </ul>
-            <!-- Search (inside collapse for mobile) -->
-            <form class="d-flex d-lg-inline-flex" style="max-width:200px" action="<?= BASE_URL ?>views/researcher/compounds/index.php" method="GET">
-                <div class="input-group input-group-sm">
-                    <input type="text" name="search" class="form-control form-control-sm border-light-subtle" placeholder="Search... (Ctrl+K)" aria-label="Search">
-                </div>
+            <form class="d-flex" style="max-width:200px" action="<?= BASE_URL ?>views/researcher/compounds/index.php" method="GET">
+                <input type="text" name="search" class="form-control form-control-sm border-light-subtle" placeholder="Search... (Ctrl+K)" aria-label="Search">
             </form>
         </div>
     </div>
