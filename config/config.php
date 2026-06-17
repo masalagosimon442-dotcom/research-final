@@ -103,12 +103,14 @@ if (FORCE_HTTPS && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on')) {
 
 // ── Start Session ─────────────────────────────────────────────────────────────
 if (session_status() === PHP_SESSION_NONE) {
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
     session_set_cookie_params([
         'lifetime' => SESSION_LIFETIME,
         'path'     => '/',
-        'secure'   => FORCE_HTTPS,
+        'secure'   => $isHttps,
         'httponly'  => true,
-        'samesite' => 'Strict',
+        'samesite' => 'Lax',
     ]);
     session_start();
 }
