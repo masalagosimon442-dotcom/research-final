@@ -19,9 +19,9 @@ include __DIR__ . '/../layouts/header.php';
                         <!-- Brand -->
                         <div class="text-center mb-3">
                             <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                                 style="width:80px;height:80px;background:linear-gradient(135deg,#198754,#0f5132);box-shadow:0 6px 24px rgba(25,135,84,0.3)"
+                                 style="width:80px;height:80px;background:linear-gradient(135deg,#198754,#0f5132);box-shadow:0 6px 24px rgba(25,135,84,0.3);padding:12px"
                                  id="logoTrigger">
-                                <span style="font-size:2.4rem">🌿</span>
+                                <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Hazina Asili" style="width:100%;height:100%">
                             </div>
                             <h4 class="fw-bold mb-1" style="letter-spacing:2px;color:#198754">HAZINA ASILI</h4>
                             <p class="text-muted mt-1 mb-0" style="letter-spacing:.5px;font-size:.8rem">Natural Organic Compounds Database</p>

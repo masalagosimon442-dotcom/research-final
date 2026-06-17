@@ -12,7 +12,7 @@ $unreadNotifs    = (new Notification())->countUnread($_SESSION['user_id']);
         <!-- 1. Logo + Title -->
         <a class="navbar-brand d-flex align-items-center gap-2" href="<?= BASE_URL ?>views/admin/dashboard.php" style="text-decoration:none">
             <div class="d-flex align-items-center justify-content-center rounded-circle" style="width:36px;height:36px;background:rgba(25,135,84,0.25);border:2px solid rgba(25,135,84,0.5)">
-                <span style="font-size:1.2rem">🌿</span>
+                <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Logo" style="width:28px;height:28px">
             </div>
             <span class="fw-bold text-white" style="font-size:1.3rem;letter-spacing:1.5px">HAZINA ASILI</span>
             <span class="badge bg-danger" style="font-size:.55rem">ADMIN</span>

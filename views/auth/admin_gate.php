@@ -17,8 +17,8 @@ include __DIR__ . '/../layouts/header.php';
 
                         <div class="text-center mb-4">
                             <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-                                 style="width:120px;height:120px;background:linear-gradient(135deg,#dc3545,#842029);box-shadow:0 10px 40px rgba(220,53,69,0.35)">
-                                <span style="font-size:3.5rem">🛡️</span>
+                                 style="width:120px;height:120px;background:linear-gradient(135deg,#dc3545,#842029);box-shadow:0 10px 40px rgba(220,53,69,0.35);padding:20px">
+                                <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Hazina Asili" style="width:100%;height:100%;filter:brightness(0) invert(1)">
                             </div>
                             <h3 class="fw-bold mb-1" style="letter-spacing:3px;color:#dc3545">HAZINA ASILI</h3>
                             <p class="text-muted mt-1" style="font-size:.9rem">Admin Access Portal</p>

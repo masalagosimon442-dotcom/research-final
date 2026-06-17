@@ -1,9 +1,8 @@
     <footer class="footer mt-auto" style="background:linear-gradient(180deg,#1a1a2e,#0f0f1a);border-top:1px solid rgba(25,135,84,0.2)">
         <div class="container-fluid px-4 pt-4 pb-3">
             <div class="text-center">
-                <!-- Logo & Name -->
                 <div class="mb-2">
-                    <span style="font-size:2rem">🌿</span>
+                    <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Logo" style="width:32px;height:32px">
                 </div>
                 <h6 class="text-white fw-bold mb-1" style="letter-spacing:2px">HAZINA ASILI</h6>
                 <p class="mb-3" style="font-size:.8rem;color:rgba(255,255,255,.45)">Natural Organic Compounds Database</p>
