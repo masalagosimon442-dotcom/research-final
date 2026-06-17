@@ -63,10 +63,14 @@
         <button id="aiChatToggle" class="ai-chat-btn" title="AI Assistant" aria-label="Open AI Assistant">
             <i class="bi bi-robot"></i>
         </button>
+        <!-- Floating label for discoverability -->
+        <div id="aiChatLabel" style="position:fixed;bottom:85px;right:20px;background:#198754;color:#fff;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:1059;animation:bounceIn .5s;cursor:pointer" onclick="document.getElementById('aiChatToggle').click();this.style.display='none';">
+            <i class="bi bi-stars me-1"></i> Niulize AI!
+        </div>
         <div id="aiChatPanel" class="ai-chat-panel" style="display:none">
             <div class="ai-chat-header">
                 <span><i class="bi bi-robot me-2"></i>AI Research Assistant</span>
-                <button id="aiChatClose" class="btn btn-sm btn-link text-white"><i class="bi bi-x-lg"></i></button>
+                <button id="aiChatClose" class="btn btn-sm btn-outline-light rounded-circle d-flex align-items-center justify-content-center" style="width:30px;height:30px;padding:0"><i class="bi bi-x-lg"></i></button>
             </div>
             <div id="aiChatMessages" class="ai-chat-messages">
                 <div class="ai-msg ai-msg-bot">
@@ -115,6 +119,8 @@
             var open = panel.style.display === 'none';
             panel.style.display = open ? 'flex' : 'none';
             toggle.style.display = open ? 'none' : 'flex';
+            var label = document.getElementById('aiChatLabel');
+            if (label) label.style.display = open ? 'none' : 'block';
             if (open) input.focus();
         });
 
