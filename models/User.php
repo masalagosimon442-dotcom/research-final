@@ -126,9 +126,14 @@ class User {
     }
 
     public function getContributionStats(int $userId): array {
-        $ins = $this->db->prepare("SELECT COUNT(*) AS total, SUM(status='approved') AS approved, SUM(status='pending') AS pending, SUM(status='rejected') AS rejected FROM researcher_insights WHERE user_id=?");
+        if (defined('DB_DRIVER') && DB_DRIVER === 'pgsql') {
+            $sql = "SELECT COUNT(*) AS total, SUM(CASE WHEN status='approved' THEN 1 ELSE 0 END) AS approved, SUM(CASE WHEN status='pending' THEN 1 ELSE 0 END) AS pending, SUM(CASE WHEN status='rejected' THEN 1 ELSE 0 END) AS rejected FROM %s WHERE user_id=?";
+        } else {
+            $sql = "SELECT COUNT(*) AS total, SUM(status='approved') AS approved, SUM(status='pending') AS pending, SUM(status='rejected') AS rejected FROM %s WHERE user_id=?";
+        }
+        $ins = $this->db->prepare(sprintf($sql, 'researcher_insights'));
         $ins->execute([$userId]);
-        $rec = $this->db->prepare("SELECT COUNT(*) AS total, SUM(status='approved') AS approved, SUM(status='pending') AS pending, SUM(status='rejected') AS rejected FROM researcher_recommendations WHERE user_id=?");
+        $rec = $this->db->prepare(sprintf($sql, 'researcher_recommendations'));
         $rec->execute([$userId]);
         return ['insights' => $ins->fetch(), 'recommendations' => $rec->fetch()];
     }
