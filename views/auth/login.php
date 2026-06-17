@@ -7,24 +7,24 @@ $pageTitle = 'Login';
 include __DIR__ . '/../layouts/header.php';
 ?>
 
-<div class="min-vh-100 d-flex align-items-center py-5"
+<div class="min-vh-100 d-flex align-items-center py-4"
      style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364)">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-5 col-lg-4">
 
                 <div class="card shadow-lg border-0 rounded-4">
-                    <div class="card-body p-5">
+                    <div class="card-body p-4">
 
                         <!-- Brand -->
-                        <div class="text-center mb-4">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-                                 style="width:120px;height:120px;background:linear-gradient(135deg,#198754,#0f5132);box-shadow:0 10px 40px rgba(25,135,84,0.35)"
+                        <div class="text-center mb-3">
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
+                                 style="width:80px;height:80px;background:linear-gradient(135deg,#198754,#0f5132);box-shadow:0 6px 24px rgba(25,135,84,0.3)"
                                  id="logoTrigger">
-                                <span style="font-size:3.5rem">🌿</span>
+                                <span style="font-size:2.4rem">🌿</span>
                             </div>
-                            <h3 class="fw-bold mb-1" style="letter-spacing:3px;color:#198754">HAZINA ASILI</h3>
-                            <p class="text-muted mt-1" style="letter-spacing:.5px;font-size:.9rem">Natural Organic Compounds Database</p>
+                            <h4 class="fw-bold mb-1" style="letter-spacing:2px;color:#198754">HAZINA ASILI</h4>
+                            <p class="text-muted mt-1 mb-0" style="letter-spacing:.5px;font-size:.8rem">Natural Organic Compounds Database</p>
                         </div>
 
                         <?= renderFlash() ?>
@@ -74,14 +74,14 @@ include __DIR__ . '/../layouts/header.php';
 
                                 <div class="d-grid">
                                     <button type="submit"
-                                            class="btn btn-success btn-lg fw-semibold rounded-3">
+                                            class="btn btn-success fw-semibold rounded-3">
                                         <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
                                     </button>
                                 </div>
                             </form>
                         </div>
 
-                        <hr class="my-4" id="registerLink">
+                        <hr class="my-3" id="registerLink">
                         <div class="text-center" id="registerSection">
                             <p class="text-muted small mb-3">Or continue with</p>
                             <div class="d-flex gap-2 justify-content-center mb-3">
