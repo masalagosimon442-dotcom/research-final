@@ -13,25 +13,24 @@ if (isset($_POST['action']) && $_POST['action'] === 'backup_db') {
     }
 
     $db = Database::getInstance()->getConnection();
-    $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
+    
+    if (DB_DRIVER === 'pgsql') {
+        $tables = $db->query("SELECT tablename FROM pg_tables WHERE schemaname = 'public'")->fetchAll(PDO::FETCH_COLUMN);
+    } else {
+        $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
+    }
 
     $sql  = "-- HAZINA ASILI Database Backup\n";
     $sql .= "-- Generated: " . date('Y-m-d H:i:s') . "\n";
     $sql .= "-- By: " . sanitize(currentUser()['name']) . "\n\n";
-    $sql .= "SET FOREIGN_KEY_CHECKS = 0;\n\n";
 
     foreach ($tables as $table) {
-        // Table structure
-        $create = $db->query("SHOW CREATE TABLE `{$table}`")->fetch();
-        $sql .= "-- Table: {$table}\n";
-        $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
-        $sql .= $create['Create Table'] . ";\n\n";
-
         // Table data
-        $rows = $db->query("SELECT * FROM `{$table}`")->fetchAll();
+        $rows = $db->query("SELECT * FROM \"{$table}\"")->fetchAll();
         if (!empty($rows)) {
-            $cols = '`' . implode('`, `', array_keys($rows[0])) . '`';
-            $sql .= "INSERT INTO `{$table}` ({$cols}) VALUES\n";
+            $cols = '"' . implode('", "', array_keys($rows[0])) . '"';
+            $sql .= "-- Table: {$table}\n";
+            $sql .= "INSERT INTO \"{$table}\" ({$cols}) VALUES\n";
             $vals = [];
             foreach ($rows as $row) {
                 $escaped = array_map(function($v) use ($db) {
@@ -43,8 +42,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'backup_db') {
             $sql .= implode(",\n", $vals) . ";\n\n";
         }
     }
-
-    $sql .= "SET FOREIGN_KEY_CHECKS = 1;\n";
 
     (new ActivityLog())->log($_SESSION['user_id'], 'database_backup', 'Manual database backup downloaded');
 

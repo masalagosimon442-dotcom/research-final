@@ -152,8 +152,9 @@ class Compound {
     }
 
     public function getReferences(int $compoundId): array {
+        $refTable = (defined('DB_DRIVER') && DB_DRIVER === 'pgsql') ? '"references"' : '`references`';
         $stmt = $this->db->prepare(
-            "SELECT r.* FROM `references` r
+            "SELECT r.* FROM {$refTable} r
              JOIN compound_reference cr ON r.id = cr.reference_id
              WHERE cr.compound_id = ?"
         );
@@ -214,7 +215,7 @@ class Compound {
         $stmt = $this->db->query(
             "SELECT COALESCE(o.kingdom, 'Unknown') AS kingdom, COUNT(c.id) AS cnt
              FROM compounds c LEFT JOIN organisms o ON c.organism_id = o.id
-             GROUP BY kingdom ORDER BY cnt DESC"
+             GROUP BY COALESCE(o.kingdom, 'Unknown') ORDER BY cnt DESC"
         );
         return $stmt->fetchAll();
     }
