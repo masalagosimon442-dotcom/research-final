@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../models/Notification.php';
 $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
 ?>
-<nav class="navbar navbar-dark bg-success sticky-top shadow" role="navigation" aria-label="Main navigation">
+<nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top shadow" role="navigation" aria-label="Main navigation">
     <div class="container-fluid">
 
         <!-- 1. Logo (always left) -->
@@ -23,10 +23,10 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
         </script>
 
         <!-- 2. Icons + Hamburger (always right, same row on mobile) -->
-        <div class="d-flex align-items-center gap-1 ms-auto">
+        <div class="d-flex align-items-center gap-1 ms-auto order-lg-last">
 
-            <!-- Hamburger (all screens) -->
-            <button class="navbar-toggler border-0 px-2" type="button"
+            <!-- Hamburger (mobile only) -->
+            <button class="navbar-toggler border-0 d-lg-none px-2" type="button"
                     data-bs-toggle="collapse" data-bs-target="#researcherNav"
                     style="background:rgba(255,255,255,0.15);border-radius:8px">
                 <span class="navbar-toggler-icon"></span>
