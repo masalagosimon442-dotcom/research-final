@@ -11,7 +11,9 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
                  style="width:40px;height:40px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.2);padding:4px;flex-shrink:0">
                 <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Logo" style="width:100%;height:100%">
             </div>
-            <span class="fw-bold text-white" style="font-size:1.2rem;letter-spacing:1.5px">HAZINA ASILI</span>
+            <!-- Full title on desktop, short on mobile -->
+            <span class="fw-bold text-white d-none d-sm-inline" style="font-size:1.2rem;letter-spacing:1.5px">HAZINA ASILI</span>
+            <span class="fw-bold text-white d-inline d-sm-none" style="font-size:1rem;letter-spacing:1px">HAZINA</span>
         </a>
         <script>
         (function(){
@@ -25,9 +27,10 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
         </script>
 
         <!-- Hamburger (middle, mobile only) -->
-        <button class="navbar-toggler border-0 d-lg-none" type="button"
+        <button class="navbar-toggler border-0 d-lg-none px-2" type="button"
                 data-bs-toggle="collapse" data-bs-target="#researcherNav"
-                aria-controls="researcherNav" aria-expanded="false" aria-label="Toggle navigation">
+                aria-controls="researcherNav" aria-expanded="false" aria-label="Toggle navigation"
+                style="background:rgba(255,255,255,0.15);border-radius:8px !important">
             <span class="navbar-toggler-icon"></span>
         </button>
 

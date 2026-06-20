@@ -15,7 +15,8 @@ $unreadNotifs    = (new Notification())->countUnread($_SESSION['user_id']);
                  style="width:40px;height:40px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.3);padding:4px;flex-shrink:0">
                 <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Logo" style="width:100%;height:100%">
             </div>
-            <span class="fw-bold text-white" style="font-size:1.3rem;letter-spacing:1.5px">HAZINA ASILI</span>
+            <span class="fw-bold text-white d-none d-sm-inline" style="font-size:1.3rem;letter-spacing:1.5px">HAZINA ASILI</span>
+            <span class="fw-bold text-white d-inline d-sm-none" style="font-size:1rem;letter-spacing:1px">HAZINA</span>
             <span class="badge bg-danger" style="font-size:.55rem">ADMIN</span>
         </a>
 
