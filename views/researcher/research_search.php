@@ -403,4 +403,68 @@ function escHtml(str) {
     if (!str) return '';
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+function showCompoundDetail(cid, name) {
+    // Show loading modal
+    var modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.id = 'compoundDetailModal';
+    modal.innerHTML = `
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-capsule me-2"></i>${escHtml(name)}</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="compoundDetailBody">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary mb-2"></div>
+                        <p class="text-muted">Loading compound details...</p>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    document.body.appendChild(modal);
+    var bsModal = new bootstrap.Modal(modal);
+    bsModal.show();
+
+    modal.addEventListener('hidden.bs.modal', function() { modal.remove(); });
+
+    var BASE = document.querySelector('meta[name="base-url"]').content;
+    var formData = new FormData();
+    formData.append('action', 'pubchem_detail');
+    formData.append('cid', cid);
+    formData.append('query', name);
+
+    fetch(BASE + 'controllers/api_hybrid_search.php', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(function(data) {
+        var c = data.data;
+        if (!c) { document.getElementById('compoundDetailBody').innerHTML = '<p class="text-danger text-center py-3">Could not load details.</p>'; return; }
+        
+        document.getElementById('compoundDetailBody').innerHTML = `
+            <div class="row g-3">
+                <div class="col-md-4 text-center">
+                    <img src="${escHtml(c.image_url)}" class="img-fluid rounded border" style="max-height:200px" onerror="this.parentElement.innerHTML='<code class=\\'fs-5\\'>${escHtml(c.formula||'')}</code>'" alt="Structure">
+                    <div class="mt-2"><small class="text-muted">2D Structure</small></div>
+                </div>
+                <div class="col-md-8">
+                    <table class="table table-sm">
+                        <tr><th>Name</th><td>${escHtml(c.name)}</td></tr>
+                        ${c.iupac_name ? `<tr><th>IUPAC Name</th><td style="font-size:.8rem">${escHtml(c.iupac_name)}</td></tr>` : ''}
+                        ${c.formula ? `<tr><th>Formula</th><td><code>${escHtml(c.formula)}</code></td></tr>` : ''}
+                        ${c.molecular_weight ? `<tr><th>Molecular Weight</th><td>${c.molecular_weight} g/mol</td></tr>` : ''}
+                        ${c.inchikey ? `<tr><th>InChIKey</th><td style="font-size:.75rem">${escHtml(c.inchikey)}</td></tr>` : ''}
+                        ${c.xlogp ? `<tr><th>XLogP</th><td>${c.xlogp}</td></tr>` : ''}
+                        ${c.cid ? `<tr><th>PubChem CID</th><td>${c.cid}</td></tr>` : ''}
+                    </table>
+                    ${c.synonyms && c.synonyms.length > 0 ? `<div class="mb-2"><strong class="small">Also known as:</strong><br>${c.synonyms.map(s => `<span class="badge bg-light text-dark border me-1 mb-1">${escHtml(s)}</span>`).join('')}</div>` : ''}
+                    ${c.smiles ? `<div><strong class="small">SMILES:</strong><div class="font-monospace p-2 bg-light rounded" style="font-size:.7rem;word-break:break-all">${escHtml(c.smiles)}</div></div>` : ''}
+                </div>
+            </div>`;
+    })
+    .catch(function() {
+        document.getElementById('compoundDetailBody').innerHTML = '<p class="text-danger text-center py-3">Network error loading details.</p>';
+    });
+}
 </script>
