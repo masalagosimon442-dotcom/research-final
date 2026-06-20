@@ -26,6 +26,13 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
         <!-- 2. Icons + Hamburger (always right, same row on mobile) -->
         <div class="d-flex align-items-center gap-1 ms-auto">
 
+            <!-- Hamburger (mobile only, FIRST before icons) -->
+            <button class="navbar-toggler border-0 d-lg-none px-2" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#researcherNav"
+                    style="background:rgba(255,255,255,0.15);border-radius:8px">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
             <!-- Theme -->
             <button class="btn btn-link text-white p-1" onclick="toggleDarkMode()" title="Toggle theme" style="font-size:1.1rem">
                 <i class="bi bi-moon-fill theme-icon-dark"></i>
@@ -84,12 +91,6 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
                 </ul>
             </div>
 
-            <!-- Hamburger (mobile only, after icons) -->
-            <button class="navbar-toggler border-0 d-lg-none ms-1 px-2" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#researcherNav"
-                    style="background:rgba(255,255,255,0.15);border-radius:8px">
-                <span class="navbar-toggler-icon"></span>
-            </button>
         </div>
 
         <!-- 3. Collapsible nav links -->
