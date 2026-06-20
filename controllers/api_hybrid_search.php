@@ -6,9 +6,16 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/Compound.php';
 require_once __DIR__ . '/../models/Organism.php';
+require_once __DIR__ . '/../models/ActivityLog.php';
 require_once __DIR__ . '/../helpers/ExternalSearch.php';
 
 header('Content-Type: application/json');
+
+// Catch all errors and return JSON
+set_exception_handler(function($e) {
+    echo json_encode(['success' => false, 'error' => 'Server error: ' . $e->getMessage()]);
+    exit;
+});
 
 if (!isLoggedIn()) {
     http_response_code(401);
