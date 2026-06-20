@@ -266,7 +266,15 @@ function doSearch(type, customQuery) {
         document.getElementById('searchLoading').classList.add('d-none');
 
         if (!data.success) {
-            alert('Search error: ' + data.error);
+            if (data.rate_limited) {
+                document.getElementById('noResults').classList.remove('d-none');
+                document.getElementById('noResults').innerHTML = 
+                    '<i class="bi bi-hourglass-split fs-1 text-warning d-block mb-3"></i>' +
+                    '<h5 class="text-warning">Rate Limit Reached</h5>' +
+                    '<p class="text-muted small">You have made 20 external searches this hour.<br>Please wait before searching again.<br>Your local database search still works — try browsing <a href="' + BASE + 'views/researcher/compounds/index.php">Compounds</a>.</p>';
+            } else {
+                alert('Search error: ' + data.error);
+            }
             return;
         }
 

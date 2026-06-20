@@ -25,6 +25,36 @@ if (empty($query)) {
     exit;
 }
 
+// ── Rate limit: 20 external searches per user per hour ────────
+$uid = $_SESSION['user_id'];
+$db  = Database::getInstance()->getConnection();
+try {
+    if (DB_DRIVER === 'pgsql') {
+        $countStmt = $db->prepare(
+            "SELECT COUNT(*) FROM external_searches 
+             WHERE user_id = ? AND created_at >= NOW() - INTERVAL '1 hour'"
+        );
+    } else {
+        $countStmt = $db->prepare(
+            "SELECT COUNT(*) FROM external_searches 
+             WHERE user_id = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 1 HOUR)"
+        );
+    }
+    $countStmt->execute([$uid]);
+    $searchesThisHour = (int)$countStmt->fetchColumn();
+
+    if ($searchesThisHour >= 20) {
+        echo json_encode([
+            'success' => false,
+            'error'   => 'Rate limit reached. You have made 20 external searches this hour. Please wait before searching again.',
+            'rate_limited' => true,
+        ]);
+        exit;
+    }
+} catch (Exception $e) {
+    // If table doesn't exist yet, allow search
+}
+
 $external = new ExternalSearch();
 
 switch ($action) {
