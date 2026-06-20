@@ -19,7 +19,7 @@ include __DIR__ . '/../layouts/header.php';
                         <!-- Brand -->
                         <div class="text-center mb-3">
                             <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                                 style="width:80px;height:80px;background:linear-gradient(135deg,#198754,#0f5132);box-shadow:0 6px 24px rgba(25,135,84,0.3);padding:12px"
+                                 style="width:90px;height:90px;background:#fff;box-shadow:0 8px 32px rgba(25,135,84,0.3);padding:12px"
                                  id="logoTrigger">
                                 <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Hazina Asili" style="width:100%;height:100%">
                             </div>

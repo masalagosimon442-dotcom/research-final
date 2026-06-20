@@ -6,8 +6,9 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
     <div class="container-fluid">
         <!-- 1. Logo + Title -->
         <a class="navbar-brand d-flex align-items-center gap-2" href="<?= BASE_URL ?>views/researcher/dashboard.php" id="navLogo" style="text-decoration:none">
-            <div class="d-flex align-items-center justify-content-center rounded-circle" style="width:36px;height:36px;background:rgba(255,255,255,0.15)">
-                <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Logo" style="width:28px;height:28px">
+            <div class="d-flex align-items-center justify-content-center rounded-circle" 
+                 style="width:40px;height:40px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.2);padding:4px;flex-shrink:0">
+                <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Logo" style="width:100%;height:100%">
             </div>
             <span class="fw-bold text-white" style="font-size:1.3rem;letter-spacing:1.5px">HAZINA ASILI</span>
         </a>
@@ -97,22 +98,22 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link <?= activeNav('dashboard.php') ?>" href="<?= BASE_URL ?>views/researcher/dashboard.php">
-                        <i class="bi bi-speedometer2"></i> Dashboard
+                        📊 Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= BASE_URL ?>views/researcher/compounds/index.php">
-                        <i class="bi bi-capsule"></i> Compounds
+                        💊 Compounds
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= BASE_URL ?>views/researcher/research_search.php">
-                        <i class="bi bi-search"></i> Research Search
+                        🔬 Research
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        <i class="bi bi-tools"></i> Tools
+                        ⚙️ Tools
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<?= BASE_URL ?>views/researcher/compounds/advanced_search.php"><i class="bi bi-funnel me-2"></i>Advanced Search</a></li>
@@ -121,12 +122,12 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= BASE_URL ?>views/researcher/organisms/index.php">
-                        <i class="bi bi-tree"></i> Organisms
+                        🌿 Organisms
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        <i class="bi bi-chat-square-text"></i> Submissions
+                        📝 Submissions
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<?= BASE_URL ?>views/researcher/insights/index.php">My Insights</a></li>

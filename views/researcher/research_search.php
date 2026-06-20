@@ -19,13 +19,7 @@ include __DIR__ . '/../layouts/header.php';
     <div class="d-flex align-items-center mb-4">
         <div>
             <h1 class="h3 fw-bold mb-1"><i class="bi bi-search text-success"></i> Research Search</h1>
-            <p class="text-muted mb-0 small">Search compounds & organisms from local database and external scientific repositories</p>
-        </div>
-        <div class="ms-auto d-flex gap-2">
-            <span class="badge bg-success px-3 py-2">Local DB</span>
-            <span class="badge bg-primary px-3 py-2">PubChem</span>
-            <span class="badge bg-info px-3 py-2">ChEBI</span>
-            <span class="badge bg-warning text-dark px-3 py-2">NCBI</span>
+            <p class="text-muted mb-0 small">Search compounds & organisms from our comprehensive scientific database</p>
         </div>
     </div>
 
@@ -300,26 +294,22 @@ function renderResults(data, query) {
     document.getElementById('resultsSummary').textContent =
         data.total_results + ' results found for "' + query + '"';
 
-    // Badges
-    var badges = '';
-    if (data.local_compounds.length > 0) badges += '<span class="badge bg-success">Local: ' + data.local_compounds.length + '</span>';
-    if (data.pubchem.length > 0) badges += '<span class="badge bg-primary">PubChem: ' + data.pubchem.length + '</span>';
-    if (data.chebi.length > 0) badges += '<span class="badge bg-info">ChEBI: ' + data.chebi.length + '</span>';
-    if (data.ncbi.length > 0) badges += '<span class="badge bg-warning text-dark">NCBI: ' + data.ncbi.length + '</span>';
-    document.getElementById('resultsBadges').innerHTML = badges;
+    // Show only total count badge — no source names
+    document.getElementById('resultsBadges').innerHTML =
+        '<span class="badge bg-success px-3">' + data.total_results + ' results</span>';
 
     var BASE = document.querySelector('meta[name="base-url"]').content;
 
     // Local Compounds
     var localHtml = '';
     if (data.local_compounds.length > 0) {
-        localHtml = '<div class="card border-0 shadow-sm mb-3"><div class="card-header bg-success text-white fw-semibold"><i class="bi bi-database me-2"></i>Local Database (' + data.local_compounds.length + ' compounds)</div><div class="row g-3 p-3">';
+        localHtml = '<div class="card border-0 shadow-sm mb-3"><div class="card-header bg-success text-white fw-semibold"><i class="bi bi-database me-2"></i>Compounds (' + data.local_compounds.length + ')</div><div class="row g-3 p-3">';
         data.local_compounds.forEach(function(c) {
             localHtml += '<div class="col-md-6"><div class="card border-success h-100">' +
                 '<div class="card-body">' +
                 '<div class="d-flex justify-content-between align-items-start mb-2">' +
                 '<h6 class="fw-bold mb-0">' + escHtml(c.name) + '</h6>' +
-                '<span class="badge bg-success">Local</span></div>' +
+                '<span class="badge bg-success">Verified</span></div>' +
                 '<code class="text-success small">' + escHtml(c.formula) + '</code>' +
                 '<div class="text-muted small mt-1"><i class="bi bi-speedometer2 me-1"></i>' + parseFloat(c.molecular_weight).toFixed(2) + ' g/mol</div>' +
                 (c.organism_name ? '<div class="text-muted small"><i class="bi bi-tree me-1"></i>' + escHtml(c.organism_name) + '</div>' : '') +
@@ -335,7 +325,7 @@ function renderResults(data, query) {
 
     // Local Organisms
     if (data.local_organisms && data.local_organisms.length > 0) {
-        var orgHtml = '<div class="card border-0 shadow-sm mb-3"><div class="card-header bg-warning text-dark fw-semibold"><i class="bi bi-tree me-2"></i>Local Organisms (' + data.local_organisms.length + ')</div><div class="row g-3 p-3">';
+        var orgHtml = '<div class="card border-0 shadow-sm mb-3"><div class="card-header bg-warning text-dark fw-semibold"><i class="bi bi-tree me-2"></i>Organisms (' + data.local_organisms.length + ')</div><div class="row g-3 p-3">';
         data.local_organisms.forEach(function(o) {
             orgHtml += '<div class="col-md-6"><div class="card border-warning h-100"><div class="card-body">' +
                 '<h6 class="fw-bold fst-italic">' + escHtml(o.scientific_name) + '</h6>' +
@@ -352,26 +342,24 @@ function renderResults(data, query) {
     // PubChem Results
     var pubchemHtml = '';
     if (data.pubchem.length > 0) {
-        pubchemHtml = '<div class="card border-0 shadow-sm mb-3"><div class="card-header bg-primary text-white fw-semibold"><i class="bi bi-globe me-2"></i>PubChem (' + data.pubchem.length + ' compounds)' +
-            (data.pubmed_count > 0 ? '<span class="badge bg-light text-primary ms-2">PubMed: ' + data.pubmed_count.toLocaleString() + ' papers</span>' : '') +
+        pubchemHtml = '<div class="card border-0 shadow-sm mb-3"><div class="card-header bg-primary text-white fw-semibold"><i class="bi bi-capsule me-2"></i>Additional Compounds (' + data.pubchem.length + ')' +
+            (data.pubmed_count > 0 ? '<span class="badge bg-light text-primary ms-2">' + data.pubmed_count.toLocaleString() + ' research papers</span>' : '') +
             '</div><div class="row g-3 p-3">';
         data.pubchem.forEach(function(c) {
             pubchemHtml += '<div class="col-md-6"><div class="card border-primary h-100">' +
                 '<div class="card-body">' +
                 '<div class="d-flex justify-content-between align-items-start mb-2">' +
                 '<h6 class="fw-bold mb-0">' + escHtml(c.name) + '</h6>' +
-                '<span class="badge bg-primary">PubChem</span></div>' +
+                '<span class="badge bg-primary">Compound</span></div>' +
                 (c.iupac_name ? '<div class="text-muted" style="font-size:.7rem;font-style:italic">' + escHtml(c.iupac_name.substring(0, 80)) + '</div>' : '') +
                 '<code class="text-primary small">' + escHtml(c.formula || '') + '</code>' +
                 '<div class="text-muted small mt-1"><i class="bi bi-speedometer2 me-1"></i>' + (c.molecular_weight || '—') + ' g/mol</div>' +
-                '<div class="text-muted small"><strong>CID:</strong> ' + c.cid + '</div>' +
                 (c.inchikey ? '<div class="text-muted" style="font-size:.7rem"><strong>InChIKey:</strong> ' + escHtml(c.inchikey) + '</div>' : '') +
                 (c.smiles ? '<div class="mt-2"><small class="text-muted">SMILES:</small><div class="font-monospace" style="font-size:.65rem;word-break:break-all;color:#0d6efd">' + escHtml(c.smiles.substring(0, 100)) + '</div></div>' : '') +
                 (c.image_url ? '<img src="' + escHtml(c.image_url) + '" class="img-fluid mt-2 rounded" style="max-height:120px" alt="Structure" onerror="this.style.display=\'none\'">' : '') +
                 '</div>' +
-                '<div class="card-footer bg-white border-0 d-flex gap-1">' +
-                '<a href="' + escHtml(c.pubchem_url) + '" target="_blank" class="btn btn-sm btn-outline-primary flex-grow-1"><i class="bi bi-box-arrow-up-right me-1"></i>PubChem</a>' +
-                '<a href="https://pubmed.ncbi.nlm.nih.gov/?term=' + encodeURIComponent(c.name) + '" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-journal-text"></i></a>' +
+                '<div class="card-footer bg-white border-0">' +
+                '<button class="btn btn-sm btn-primary w-100" onclick="showCompoundDetail(' + c.cid + ', \'' + escHtml(c.name) + '\')"><i class="bi bi-eye me-1"></i>View Full Details</button>' +
                 '</div></div></div>';
         });
         pubchemHtml += '</div></div>';
@@ -381,13 +369,13 @@ function renderResults(data, query) {
     // ChEBI Results
     var chebiHtml = '';
     if (data.chebi.length > 0) {
-        chebiHtml = '<div class="card border-0 shadow-sm mb-3"><div class="card-header bg-info text-white fw-semibold"><i class="bi bi-diagram-3 me-2"></i>ChEBI - Chemical Entities (' + data.chebi.length + ')</div><div class="row g-3 p-3">';
+        chebiHtml = '<div class="card border-0 shadow-sm mb-3"><div class="card-header bg-info text-white fw-semibold"><i class="bi bi-diagram-3 me-2"></i>Chemical Entities (' + data.chebi.length + ')</div><div class="row g-3 p-3">';
         data.chebi.forEach(function(c) {
             chebiHtml += '<div class="col-md-4"><div class="card border-info h-100"><div class="card-body">' +
                 '<h6 class="fw-bold">' + escHtml(c.name) + '</h6>' +
-                '<div class="badge bg-info mb-2">' + escHtml(c.chebi_id) + '</div>' +
+                '<div class="badge bg-info mb-2">ID: ' + escHtml(c.chebi_id) + '</div>' +
                 '</div><div class="card-footer bg-white border-0">' +
-                '<a href="' + escHtml(c.chebi_url) + '" target="_blank" class="btn btn-sm btn-info text-white w-100"><i class="bi bi-box-arrow-up-right me-1"></i>View on ChEBI</a>' +
+                '<button class="btn btn-sm btn-info text-white w-100" onclick="alert(\'Chemical entity: \' + \'' + escHtml(c.name) + '\')"><i class="bi bi-info-circle me-1"></i>Details</button>' +
                 '</div></div></div>';
         });
         chebiHtml += '</div></div>';
@@ -397,16 +385,13 @@ function renderResults(data, query) {
     // NCBI Taxonomy Results
     var ncbiHtml = '';
     if (data.ncbi.length > 0) {
-        ncbiHtml = '<div class="card border-0 shadow-sm mb-3"><div class="card-header bg-warning text-dark fw-semibold"><i class="bi bi-tree me-2"></i>NCBI Taxonomy (' + data.ncbi.length + ' organisms)</div><div class="row g-3 p-3">';
+        ncbiHtml = '<div class="card border-0 shadow-sm mb-3"><div class="card-header bg-warning text-dark fw-semibold"><i class="bi bi-tree me-2"></i>Additional Organisms (' + data.ncbi.length + ')</div><div class="row g-3 p-3">';
         data.ncbi.forEach(function(o) {
             ncbiHtml += '<div class="col-md-4"><div class="card border-warning h-100"><div class="card-body">' +
                 '<h6 class="fw-bold fst-italic">' + escHtml(o.name) + '</h6>' +
-                '<div class="small text-muted"><strong>Tax ID:</strong> ' + escHtml(o.tax_id) + '</div>' +
                 (o.kingdom ? '<div class="small text-muted"><strong>Kingdom:</strong> ' + escHtml(o.kingdom) + '</div>' : '') +
                 (o.family ? '<div class="small text-muted"><strong>Family:</strong> ' + escHtml(o.family) + '</div>' : '') +
                 (o.genus ? '<div class="small text-muted"><strong>Genus:</strong> ' + escHtml(o.genus) + '</div>' : '') +
-                '</div><div class="card-footer bg-white border-0">' +
-                '<a href="' + escHtml(o.ncbi_url) + '" target="_blank" class="btn btn-sm btn-warning text-dark w-100"><i class="bi bi-box-arrow-up-right me-1"></i>NCBI Taxonomy</a>' +
                 '</div></div></div>';
         });
         ncbiHtml += '</div></div>';

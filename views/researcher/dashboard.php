@@ -168,6 +168,70 @@ include __DIR__ . '/../layouts/header.php';
         </div>
     </div>
 
+    <!-- ── Research Search Cards ─────────────────────────────── -->
+    <div class="mt-4">
+        <div class="d-flex align-items-center mb-3">
+            <h5 class="fw-semibold mb-0"><i class="bi bi-search text-success me-2"></i>Research Search</h5>
+            <a href="<?= BASE_URL ?>views/researcher/research_search.php" class="btn btn-sm btn-outline-success ms-auto">
+                Open Full Search →
+            </a>
+        </div>
+        <div class="row g-3">
+            <!-- By Name -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100 text-center p-3"
+                     style="cursor:pointer;transition:.2s"
+                     onclick="window.location='<?= BASE_URL ?>views/researcher/research_search.php?tab=name'"
+                     onmouseover="this.style.transform='translateY(-3px)'"
+                     onmouseout="this.style.transform='translateY(0)'">
+                    <div class="fs-1 mb-2">🔬</div>
+                    <h6 class="fw-bold">Search by Name</h6>
+                    <p class="text-muted small mb-2">Search any compound or organism by name across all sources</p>
+                    <span class="badge bg-success">Most Common</span>
+                </div>
+            </div>
+            <!-- By Formula -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100 text-center p-3"
+                     style="cursor:pointer;transition:.2s"
+                     onclick="window.location='<?= BASE_URL ?>views/researcher/research_search.php?tab=formula'"
+                     onmouseover="this.style.transform='translateY(-3px)'"
+                     onmouseout="this.style.transform='translateY(0)'">
+                    <div class="fs-1 mb-2">⚗️</div>
+                    <h6 class="fw-bold">Search by Formula</h6>
+                    <p class="text-muted small mb-2">Find compounds using molecular formula (e.g. C21H20O6)</p>
+                    <span class="badge bg-primary">Chemistry</span>
+                </div>
+            </div>
+            <!-- Draw Structure -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100 text-center p-3"
+                     style="cursor:pointer;transition:.2s"
+                     onclick="window.location='<?= BASE_URL ?>views/researcher/research_search.php?tab=draw'"
+                     onmouseover="this.style.transform='translateY(-3px)'"
+                     onmouseout="this.style.transform='translateY(0)'">
+                    <div class="fs-1 mb-2">✏️</div>
+                    <h6 class="fw-bold">Draw Structure</h6>
+                    <p class="text-muted small mb-2">Draw a molecular structure and search by SMILES notation</p>
+                    <span class="badge bg-info">Advanced</span>
+                </div>
+            </div>
+            <!-- By Organism -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100 text-center p-3"
+                     style="cursor:pointer;transition:.2s"
+                     onclick="window.location='<?= BASE_URL ?>views/researcher/research_search.php?tab=organism'"
+                     onmouseover="this.style.transform='translateY(-3px)'"
+                     onmouseout="this.style.transform='translateY(0)'">
+                    <div class="fs-1 mb-2">🌿</div>
+                    <h6 class="fw-bold">Search by Organism</h6>
+                    <p class="text-muted small mb-2">Find compounds by their source organism or taxonomy</p>
+                    <span class="badge bg-warning text-dark">Taxonomy</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Contribution Chart -->
     <div class="card border-0 shadow-sm mt-4">
         <div class="card-header bg-white fw-semibold">
