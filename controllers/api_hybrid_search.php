@@ -66,6 +66,74 @@ $external = new ExternalSearch();
 
 switch ($action) {
 
+    // ── Sequential workflow: Local → PubChem → NCBI Taxonomy ──────────────────
+    case 'search_sequential':
+        $compoundModel = new Compound();
+        $orgModel      = new Organism();
+
+        // ── Step 1: Local Database ───────────────────────────────────────────
+        $localCompounds = $compoundModel->getAll(0, 10, $query, $type === 'formula' ? 'formula' : 'name');
+        $localOrganisms = [];
+
+        if ($type === 'organism' || $type === 'name') {
+            $localOrganisms = $orgModel->getAll(0, 5, $query);
+        }
+
+        $localFound = count($localCompounds) + count($localOrganisms);
+
+        // ── Step 2: PubChem (only if local found nothing) ────────────────────
+        $pubchemResults = [];
+        $pubchemSearched = false;
+        if ($localFound === 0 && in_array($type, ['name', 'formula', 'smiles'])) {
+            $pubchemResults  = $external->searchPubChem($query, $type);
+            $pubchemSearched = true;
+        }
+
+        // ── Step 3: NCBI Taxonomy (only if local + PubChem found nothing) ────
+        $ncbiResults = [];
+        $ncbiSearched = false;
+        if ($localFound === 0 && empty($pubchemResults) && in_array($type, ['name', 'organism'])) {
+            $ncbiResults  = $external->searchNCBI($query);
+            $ncbiSearched = true;
+        }
+
+        // ── PubMed count (bonus metadata when we have any compound results) ──
+        $pubmedCount = 0;
+        if ($type === 'name' && ($localFound > 0 || !empty($pubchemResults))) {
+            $pubmedCount = $external->getPubMedCount($query);
+        }
+
+        // ── Log ──────────────────────────────────────────────────────────────
+        $sources = ['local'];
+        if ($pubchemSearched) $sources[] = 'PubChem';
+        if ($ncbiSearched)    $sources[] = 'NCBI';
+
+        $totalResults = $localFound + count($pubchemResults) + count($ncbiResults);
+        $external->logSearch($_SESSION['user_id'], $query, $type, $sources, $totalResults);
+
+        (new ActivityLog())->log(
+            $_SESSION['user_id'], 'sequential_search',
+            "Searched: \"{$query}\" [{$type}] — {$totalResults} results from " . implode(' → ', $sources)
+        );
+
+        echo json_encode([
+            'success'          => true,
+            'query'            => $query,
+            'type'             => $type,
+            'workflow' => [
+                'local'   => ['searched' => true,          'found' => $localFound],
+                'pubchem' => ['searched' => $pubchemSearched, 'found' => count($pubchemResults)],
+                'ncbi'    => ['searched' => $ncbiSearched,    'found' => count($ncbiResults)],
+            ],
+            'local_compounds'  => $localCompounds,
+            'local_organisms'  => $localOrganisms,
+            'pubchem'          => $pubchemResults,
+            'ncbi'             => $ncbiResults,
+            'pubmed_count'     => $pubmedCount,
+            'total_results'    => $totalResults,
+        ]);
+        break;
+
     case 'search_all':
         // Search local DB first
         $compoundModel = new Compound();
