@@ -126,12 +126,22 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 }
 $_SESSION['last_activity'] = time();
 
+// ── Track Page Visit ──────────────────────────────────────────────────────────
+// Only track on GET requests (not POST/AJAX)
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['ajax'])) {
+    try {
+        require_once __DIR__ . '/../models/SiteVisit.php';
+        (new SiteVisit())->record();
+    } catch (Throwable $e) { /* silently fail */ }
+}
+
 // ── Load Dependencies ─────────────────────────────────────────────────────────
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../helpers/functions.php';
 require_once __DIR__ . '/../helpers/RateLimiter.php';
 require_once __DIR__ . '/../helpers/Mailer.php';
 require_once __DIR__ . '/../helpers/AIAssistant.php';
+require_once __DIR__ . '/../helpers/ExternalSearch.php';
 
 // ── Global Error/Exception Handlers ──────────────────────────────────────────
 set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline): bool {

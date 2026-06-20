@@ -105,6 +105,11 @@ $unreadNotifs = (new Notification())->countUnread($_SESSION['user_id']);
                         <i class="bi bi-capsule"></i> Compounds
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= BASE_URL ?>views/researcher/research_search.php">
+                        <i class="bi bi-search"></i> Research Search
+                    </a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                         <i class="bi bi-tools"></i> Tools

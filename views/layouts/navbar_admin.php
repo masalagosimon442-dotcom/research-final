@@ -158,6 +158,8 @@ $unreadNotifs    = (new Notification())->countUnread($_SESSION['user_id']);
                     <ul class="dropdown-menu dropdown-menu-dark">
                         <li><a class="dropdown-item" href="<?= BASE_URL ?>views/admin/activity_log.php"><i class="bi bi-clock-history me-2"></i>Activity Log</a></li>
                         <li><a class="dropdown-item" href="<?= BASE_URL ?>views/admin/error_log.php"><i class="bi bi-bug me-2"></i>Error Log</a></li>
+                        <li><a class="dropdown-item" href="<?= BASE_URL ?>views/admin/external_searches.php"><i class="bi bi-globe me-2"></i>External Searches</a></li>
+                        <li><a class="dropdown-item" href="<?= BASE_URL ?>views/admin/visitors.php"><i class="bi bi-people me-2"></i>Visitor Stats</a></li>
                         <li><a class="dropdown-item" href="<?= BASE_URL ?>views/admin/export.php"><i class="bi bi-download me-2"></i>Export</a></li>
                         <li><a class="dropdown-item" href="<?= BASE_URL ?>views/admin/import.php"><i class="bi bi-upload me-2"></i>Import</a></li>
                         <li><a class="dropdown-item" href="<?= BASE_URL ?>views/admin/report.php"><i class="bi bi-file-earmark-pdf me-2"></i>Reports</a></li>

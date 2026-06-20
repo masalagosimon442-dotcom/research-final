@@ -65,6 +65,19 @@ foreach ($statements as $stmt) {
 
 echo "\n✅ Results: $success executed, $skipped skipped, $errors errors.\n\n";
 
+// Run v4 migration (new tables)
+$migFile = __DIR__ . '/database/migration_v4_hybrid_pgsql.sql';
+if (file_exists($migFile)) {
+    $migSql = file_get_contents($migFile);
+    $migStmts = array_filter(array_map('trim', explode(';', $migSql)));
+    $migOk = 0;
+    foreach ($migStmts as $s) {
+        if (empty($s) || strpos(ltrim($s), '--') === 0) continue;
+        try { $pdo->exec($s); $migOk++; } catch (Exception $e) { /* skip existing */ }
+    }
+    echo "✅ Migration v4: $migOk statements applied\n\n";
+}
+
 // Create users table if missing
 try {
     $pdo->query("SELECT 1 FROM users LIMIT 1");

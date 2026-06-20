@@ -8,6 +8,8 @@ require_once __DIR__ . '/../../models/Insight.php';
 require_once __DIR__ . '/../../models/Recommendation.php';
 require_once __DIR__ . '/../../models/ActivityLog.php';
 require_once __DIR__ . '/../../models/ErrorLog.php';
+require_once __DIR__ . '/../../models/SiteVisit.php';
+require_once __DIR__ . '/../../helpers/ExternalSearch.php';
 requireAdmin();
 
 $compoundModel = new Compound();
@@ -18,6 +20,13 @@ $insightModel  = new Insight();
 $recModel      = new Recommendation();
 $logModel      = new ActivityLog();
 $errModel      = new ErrorLog();
+$visitModel    = new SiteVisit();
+$extSearch     = new ExternalSearch();
+
+$visitStats    = $visitModel->getStats();
+$dailyVisits   = $visitModel->getDailyVisits(14);
+$topPages      = $visitModel->getTopPages(5);
+$searchStats   = $extSearch->getSearchStats();
 
 $stats = [
     'compounds'        => $compoundModel->countAll(),
@@ -54,6 +63,36 @@ include __DIR__ . '/../layouts/header.php';
             <p class="text-muted mb-0">Welcome back, <?= sanitize(currentUser()['name']) ?></p>
         </div>
         <span class="text-muted small"><?= date('l, F j, Y') ?></span>
+    </div>
+
+    <!-- ── Visitor Stats ──────────────────────────────────────── -->
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <h5 class="fw-semibold text-muted mb-3"><i class="bi bi-people me-2"></i>Visitor Statistics</h5>
+        </div>
+        <?php
+        $visitCards = [
+            ['Today',      $visitStats['today']       ?? 0, 'calendar-day',    'success'],
+            ['This Week',  $visitStats['this_week']   ?? 0, 'calendar-week',   'primary'],
+            ['This Month', $visitStats['this_month']  ?? 0, 'calendar-month',  'info'],
+            ['This Year',  $visitStats['this_year']   ?? 0, 'calendar',        'warning'],
+            ['All Time',   $visitStats['total_all_time'] ?? 0, 'graph-up',     'secondary'],
+            ['Unique IPs', $visitStats['unique_visitors'] ?? 0, 'person-check','danger'],
+        ];
+        foreach ($visitCards as [$label, $val, $icon, $color]): ?>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body py-3">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
+                         style="width:44px;height:44px;background:var(--bs-<?= $color ?>-bg-subtle,#f8f9fa)">
+                        <i class="bi bi-<?= $icon ?> text-<?= $color ?> fs-5"></i>
+                    </div>
+                    <h3 class="fw-bold mb-0"><?= number_format((int)$val) ?></h3>
+                    <small class="text-muted"><?= $label ?></small>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
     </div>
 
     <!-- ── Stats Cards ─────────────────────────────────────────── -->
@@ -128,6 +167,17 @@ include __DIR__ . '/../layouts/header.php';
                 </div>
                 <div class="card-body">
                     <canvas id="trendChart" height="220"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Daily Visits (Line) -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white fw-semibold">
+                    <i class="bi bi-people text-success"></i> Daily Visitors (14 days)
+                </div>
+                <div class="card-body">
+                    <canvas id="visitsChart" height="220"></canvas>
                 </div>
             </div>
         </div>
@@ -344,6 +394,22 @@ new Chart(document.getElementById('activityChart'), {
         datasets: [{ label: 'Actions', data: actData, borderColor: '#ffc107', backgroundColor: '#ffc10722', fill: true, tension: 0.3, pointRadius: 3 }]
     },
     options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+});
+
+// ── Daily Visitors (Line) ─────────────────────────────────────
+const visitLabels = <?= json_encode(array_column($dailyVisits, 'day')) ?>;
+const visitData   = <?= json_encode(array_column($dailyVisits, 'visits')) ?>;
+const uniqueVisitData = <?= json_encode(array_column($dailyVisits, 'unique_visitors')) ?>;
+new Chart(document.getElementById('visitsChart'), {
+    type: 'line',
+    data: {
+        labels: visitLabels,
+        datasets: [
+            { label: 'Total Visits', data: visitData, borderColor: '#198754', backgroundColor: '#19875422', fill: true, tension: 0.3, pointRadius: 3 },
+            { label: 'Unique Visitors', data: uniqueVisitData, borderColor: '#0d6efd', backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, borderDash: [5,5] }
+        ]
+    },
+    options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
 });
 
 // Update charts on theme change
