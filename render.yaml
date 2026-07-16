@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: hazina-asili
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: APP_NAME
+        value: "HAZINA ASILI"
+      - key: APP_FULL_NAME
+        value: "Natural Organic Compounds Database"
+      - key: APP_VERSION
+        value: "3.0.0"
+      - key: APP_URL
+        sync: false
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: FORCE_HTTPS
+        value: "true"
+      - key: DB_HOST
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_CHARSET
+        value: "utf8mb4"
+      - key: SESSION_LIFETIME
+        value: "3600"
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: AI_ENABLED
+        value: "true"
+      - key: AI_API_KEY
+        sync: false
+      - key: AI_API_URL
+        value: "https://api.groq.com/openai/v1/chat/completions"
+      - key: AI_MODEL
+        value: "llama-3.3-70b-versatile"
+      - key: MAIL_ENABLED
+        value: "false"
