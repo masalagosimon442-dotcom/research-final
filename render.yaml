@@ -15,11 +15,15 @@ services:
       - key: APP_URL
         value: https://hazina-asili.onrender.com/
       - key: DB_DRIVER
-        value: mysql
+        value: pgsql
       - key: DB_HOST
         fromDatabase:
           name: hazina-asili-db
           property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: hazina-asili-db
+          property: port
       - key: DB_USER
         fromDatabase:
           name: hazina-asili-db
@@ -32,8 +36,8 @@ services:
         fromDatabase:
           name: hazina-asili-db
           property: database
-      - key: DB_CHARSET
-        value: utf8mb4
+      - key: DB_SSL
+        value: "true"
       - key: SESSION_LIFETIME
         value: "3600"
       - key: RECORDS_PER_PAGE
@@ -56,3 +60,4 @@ databases:
     databaseName: natural_compounds_db
     user: hazina_asili
     plan: free
+    ipAllowList: []
