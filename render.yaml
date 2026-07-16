@@ -2,48 +2,57 @@ services:
   - type: web
     name: hazina-asili
     runtime: docker
+    repo: https://github.com/masalagosimon442-dotcom/research-final
+    branch: master
     dockerfilePath: ./Dockerfile
-    plan: free
     envVars:
-      - key: PORT
-        value: "10000"
       - key: APP_NAME
-        value: "HAZINA ASILI"
-      - key: APP_FULL_NAME
-        value: "Natural Organic Compounds Database"
-      - key: APP_VERSION
-        value: "3.0.0"
-      - key: APP_URL
-        sync: false
+        value: HAZINA ASILI
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: "false"
-      - key: FORCE_HTTPS
-        value: "true"
+      - key: APP_URL
+        value: https://hazina-asili.onrender.com/
+      - key: DB_DRIVER
+        value: mysql
       - key: DB_HOST
-        sync: false
+        fromDatabase:
+          name: hazina-asili-db
+          property: host
       - key: DB_USER
-        sync: false
+        fromDatabase:
+          name: hazina-asili-db
+          property: user
       - key: DB_PASS
-        sync: false
+        fromDatabase:
+          name: hazina-asili-db
+          property: password
       - key: DB_NAME
-        sync: false
+        fromDatabase:
+          name: hazina-asili-db
+          property: database
       - key: DB_CHARSET
-        value: "utf8mb4"
+        value: utf8mb4
       - key: SESSION_LIFETIME
         value: "3600"
-      - key: ADMIN_USERNAME
-        sync: false
-      - key: ADMIN_PASSWORD
-        sync: false
-      - key: AI_ENABLED
+      - key: RECORDS_PER_PAGE
+        value: "15"
+      - key: LOGIN_MAX_ATTEMPTS
+        value: "5"
+      - key: LOGIN_LOCKOUT_MINUTES
+        value: "15"
+      - key: FORCE_HTTPS
         value: "true"
-      - key: AI_API_KEY
-        sync: false
-      - key: AI_API_URL
-        value: "https://api.groq.com/openai/v1/chat/completions"
-      - key: AI_MODEL
-        value: "llama-3.3-70b-versatile"
-      - key: MAIL_ENABLED
-        value: "false"
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: MAX_FILE_SIZE
+        value: "5242880"
+      - key: UPLOAD_DIR
+        value: assets/uploads/
+
+databases:
+  - name: hazina-asili-db
+    databaseName: natural_compounds_db
+    user: hazina_asili
+    plan: free
