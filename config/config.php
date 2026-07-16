@@ -43,7 +43,7 @@ function env(string $key, mixed $default = null): mixed {
 // ── Application ───────────────────────────────────────────────────────────────
 define('APP_NAME',      env('APP_NAME', 'HAZINA ASILI'));
 define('APP_FULL_NAME', env('APP_FULL_NAME', 'Mfumo wa Hifadhidata ya Misombo ya Asili ya Kikaboni'));
-define('APP_VERSION',   env('APP_VERSION', '3.0.0'));
+define('APP_VERSION',   env('APP_VERSION', '4.0.0'));
 define('BASE_URL',      env('APP_URL', 'http://localhost/DB/project/'));
 define('APP_ENV',       env('APP_ENV', 'development'));
 define('APP_DEBUG',     filter_var(env('APP_DEBUG', true), FILTER_VALIDATE_BOOLEAN));

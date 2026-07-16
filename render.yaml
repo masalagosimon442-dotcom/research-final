@@ -8,6 +8,8 @@ services:
     envVars:
       - key: APP_NAME
         value: HAZINA ASILI
+      - key: APP_VERSION
+        value: "4.0.0"
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
