@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: hazina-asili
+    name: hazina-asilii
     runtime: docker
-    repo: https://github.com/masalagosimon442-dotcom/research-final
-    branch: master
+    repo: https://github.com/masalagosimon442-dotcom/research-hazina-asili
+    branch: main
     dockerfilePath: ./Dockerfile
     envVars:
       - key: APP_NAME
@@ -15,19 +15,19 @@ services:
       - key: APP_DEBUG
         value: "false"
       - key: APP_URL
-        value: https://research-hazina-asili.onrender.com/
+        value: https://hazina-asilii.onrender.com/
       - key: DB_DRIVER
         value: pgsql
       - key: DB_HOST
-        value: dpg-d9fglb7avr4c73c720mg-a
+        value: dpg-d8op1srbc2fs73etrdtg-a.frankfurt-postgres.render.com
       - key: DB_PORT
         value: "5432"
       - key: DB_USER
-        value: hazina_asil_db_user
+        value: hazina_asili_db_user
       - key: DB_PASS
-        value: aABbVTFhohrVuYutkyMIkGiuLXfumWsS
+        value: 58bSrmt6kIuCCEC84VPCpYwG9gbcyliy
       - key: DB_NAME
-        value: hazina_asil_db
+        value: hazina_asili_db
       - key: DB_SSL
         value: "true"
       - key: SESSION_LIFETIME
