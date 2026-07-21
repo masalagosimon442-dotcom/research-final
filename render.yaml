@@ -15,7 +15,7 @@ services:
       - key: APP_DEBUG
         value: "false"
       - key: APP_URL
-        value: https://hazina-asili.onrender.com/
+        value: https://research-hazina-asili.onrender.com/
       - key: DB_DRIVER
         value: pgsql
       - key: DB_HOST
