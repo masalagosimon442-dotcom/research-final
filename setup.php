@@ -5,11 +5,11 @@
  * DELETE this file immediately after running!
  */
 
-$host = 'dpg-d9fglb7avr4c73c720mg-a.frankfurt-postgres.render.com';
-$port = '5432';
-$user = 'hazina_asil_db_user';
-$pass = 'aABbVTFhohrVuYutkyMIkGiuLXfumWsS';
-$db   = 'hazina_asil_db';
+$host = getenv('DB_HOST') ?: 'dpg-d9fglb7avr4c73c720mg-a.frankfurt-postgres.render.com';
+$port = getenv('DB_PORT') ?: '5432';
+$user = getenv('DB_USER') ?: 'hazina_asil_db_user';
+$pass = getenv('DB_PASS') ?: 'aABbVTFhohrVuYutkyMIkGiuLXfumWsS';
+$db   = getenv('DB_NAME') ?: 'hazina_asil_db';
 
 try {
     $dsn  = "pgsql:host={$host};port={$port};dbname={$db};sslmode=require";
