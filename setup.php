@@ -5,6 +5,11 @@
  * DELETE this file immediately after running!
  */
 
+// Security check
+if (($_GET['key'] ?? '') !== 'Admin@1234') {
+    die('Access denied. Use ?key=Admin@1234');
+}
+
 $host = 'dpg-d9fglb7avr4c73c720mg-a.frankfurt-postgres.render.com';
 $port = '5432';
 $user = 'hazina_asil_db_user';
