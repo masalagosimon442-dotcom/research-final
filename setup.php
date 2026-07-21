@@ -8,7 +8,7 @@
 $host = getenv('DB_HOST') ?: 'dpg-d8op1srbc2fs73etrdtg-a.frankfurt-postgres.render.com';
 $port = getenv('DB_PORT') ?: '5432';
 $user = getenv('DB_USER') ?: 'hazina_asili_db_user';
-$pass = getenv('DB_PASS') ?: '58bSrmt6kIuCCEC84VPCpYwG9gbcyliy';
+$pass = getenv('DB_PASS') ?: '58bSrmt6kIuCCEC04VPCpYwG9gbcyliy';
 $db   = getenv('DB_NAME') ?: 'hazina_asili_db';
 
 try {

@@ -25,7 +25,7 @@ services:
       - key: DB_USER
         value: hazina_asili_db_user
       - key: DB_PASS
-        value: 58bSrmt6kIuCCEC84VPCpYwG9gbcyliy
+        value: 58bSrmt6kIuCCEC04VPCpYwG9gbcyliy
       - key: DB_NAME
         value: hazina_asili_db
       - key: DB_SSL
