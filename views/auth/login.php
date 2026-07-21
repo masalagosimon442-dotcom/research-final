@@ -18,7 +18,6 @@ include __DIR__ . '/../layouts/header.php';
 
                         <!-- Brand -->
                         <div class="text-center mb-3">
-                            <p class="fw-bold mb-2" style="letter-spacing:4px;font-size:1.1rem;color:#2c5364;text-transform:uppercase">MASALAGO</p>
                             <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
                                  style="width:90px;height:90px;background:#fff;box-shadow:0 8px 32px rgba(25,135,84,0.3);padding:12px"
                                  id="logoTrigger">

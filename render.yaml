@@ -19,25 +19,15 @@ services:
       - key: DB_DRIVER
         value: pgsql
       - key: DB_HOST
-        fromDatabase:
-          name: hazina-asili-db
-          property: host
+        value: dpg-d9fglb7avr4c73c720mg-a
       - key: DB_PORT
-        fromDatabase:
-          name: hazina-asili-db
-          property: port
+        value: "5432"
       - key: DB_USER
-        fromDatabase:
-          name: hazina-asili-db
-          property: user
+        value: hazina_asil_db_user
       - key: DB_PASS
-        fromDatabase:
-          name: hazina-asili-db
-          property: password
+        value: aABbVTFhohrVuYutkyMIkGiuLXfumWsS
       - key: DB_NAME
-        fromDatabase:
-          name: hazina-asili-db
-          property: database
+        value: hazina_asil_db
       - key: DB_SSL
         value: "true"
       - key: SESSION_LIFETIME
@@ -51,15 +41,8 @@ services:
       - key: FORCE_HTTPS
         value: "true"
       - key: ADMIN_PASSWORD
-        generateValue: true
+        value: Admin@1234
       - key: MAX_FILE_SIZE
         value: "5242880"
       - key: UPLOAD_DIR
         value: assets/uploads/
-
-databases:
-  - name: hazina-asili-db
-    databaseName: natural_compounds_db
-    user: hazina_asili
-    plan: free
-    ipAllowList: []
